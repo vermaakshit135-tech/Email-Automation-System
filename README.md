@@ -1,14 +1,12 @@
 # Email Automation System
 
-A Python desktop and web-based email automation project that reads recipients from a CSV file, personalizes a message template, and sends emails through Gmail SMTP.
+A Python email automation project that reads recipients from a CSV file, personalizes a message template, and sends emails through Gmail SMTP.
 
 ## Features
 
 - Send emails to multiple people from a CSV file
 - Personalized templates using `{name}` placeholders
 - Optional PDF or file attachment support
-- GUI version with Tkinter
-- Web version with Streamlit
 - Gmail SMTP connection with retry handling
 - Email logs saved to CSV
 - Credentials kept in `.env`
@@ -17,8 +15,6 @@ A Python desktop and web-based email automation project that reads recipients fr
 
 - Python 3
 - Pandas
-- Tkinter
-- Streamlit
 - Gmail SMTP
 - python-dotenv
 
@@ -27,7 +23,6 @@ A Python desktop and web-based email automation project that reads recipients fr
 ```text
 Email-Automation-System/
 ├── main.py
-├── email_gui.py
 ├── app.py
 ├── test_csv.py
 ├── contacts.csv
@@ -77,18 +72,6 @@ EMAIL_PASSWORD=your_16_char_app_password
 ```
 
 > Use a real Gmail App Password. Do not use your normal Gmail password.
-
-## Run the desktop app
-
-```bash
-python email_gui.py
-```
-
-## Run the Streamlit app
-
-```bash
-streamlit run app.py
-```
 
 ## Run the contact validator
 
