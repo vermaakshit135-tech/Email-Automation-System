@@ -147,10 +147,12 @@ def send_emails(
     attachment_path=None,
     template_file=DEFAULT_TEMPLATE_FILE,
     log_file=DEFAULT_LOG_FILE,
+    template_text=None,   # NEW: message written in the app (overrides template_file)
+    on_result=None,       # NEW: called after every email so the app can save it to MySQL
 ):
     sender_email, app_password = get_email_credentials()
     df = read_contacts(contact_file)
-    template = load_email_template(template_file)
+    template = template_text if template_text is not None else load_email_template(template_file)
     debug = os.getenv("SMTP_DEBUG", "0").strip() == "1"
 
     attachment_data = None
@@ -189,6 +191,7 @@ def send_emails(
             receiver_email = str(row["email"]).strip()
             name = str(row["name"]).strip() or "there"
             status = "Sent"
+            error_text = ""   # NEW
 
             try:
                 if not EMAIL_REGEX.match(receiver_email):
@@ -218,6 +221,7 @@ def send_emails(
 
             except Exception as error:
                 status = "Failed"
+                error_text = str(error)   # NEW
                 print(f"Failed to send email to {name} ({receiver_email}): {error}")
 
             logs.append(
@@ -228,6 +232,8 @@ def send_emails(
                     "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 }
             )
+            if on_result:   # NEW
+                on_result({**logs[-1], "error": error_text})
             time.sleep(2)
     finally:
         _close_quietly(smtp)
